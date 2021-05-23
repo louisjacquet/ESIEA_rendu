@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.esieatp1.R
 import com.example.esieatp1.presentation.list.Pokemon
 
-class PokemonAdapter(private var dataSet: List<Pokemon>) :
+class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Pokemon)->Unit)?=null) :
     RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
+
 
     /**
      * Provide a reference to the type of views that you are using
@@ -47,6 +48,9 @@ class PokemonAdapter(private var dataSet: List<Pokemon>) :
         // contents of the view with that element
         val pokemon : Pokemon = dataSet[position]
         viewHolder.textView.text = pokemon.name
+        viewHolder.itemView.setOnClickListener {
+            listener?.invoke(pokemon)
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
