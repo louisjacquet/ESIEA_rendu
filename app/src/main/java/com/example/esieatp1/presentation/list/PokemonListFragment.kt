@@ -4,20 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.esieatp1.R
 import com.example.esieatp1.presentation.PokemonAdapter
-import com.example.esieatp1.presentation.api.PokeApi
-import com.example.esieatp1.presentation.api.PokemonListResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -25,11 +23,13 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class PokemonListFragment : Fragment() {
     private lateinit var recyclerView : RecyclerView
+    private lateinit var loader: ProgressBar
+    private lateinit var textViewError: TextView
     private val adapter = PokemonAdapter(listOf(), :: onClickedpokemon)
 
+    private val viewModel: PokemonListViewModel by viewModels()
 
-
-    private val layoutManager = LinearLayoutManager(context)
+    //private val layoutManager = LinearLayoutManager(context)
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -42,50 +42,23 @@ class PokemonListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.pokemon_recyclerview)
+        loader=view.findViewById(R.id.pokemon_loader)
+        textViewError=view.findViewById(R.id.pokemon_error)
         recyclerView.apply {
-            layoutManager = this@PokemonListFragment.layoutManager
+            layoutManager = LinearLayoutManager(context)
             adapter = this@PokemonListFragment.adapter
         }
-       Singletons.pokeApi.getPokemonList().enqueue(object : Callback<PokemonListResponse> {
-            //object : Callback<PokemonResponse>
-            override fun onFailure(
-                call: Call<PokemonListResponse>,
-                t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onResponse(
-                call: Call<PokemonListResponse>,
-                response: Response<PokemonListResponse>
-            ) {
-                if (response.isSuccessful && response.body() != null){
-                    val PokemonResponse = response.body() !!
-                    adapter.updateList(PokemonResponse.results)
-
-                }
+        viewModel.pokeList.observe(viewLifecycleOwner, Observer {pokemonModel ->
+            loader.isVisible = pokemonModel is PokemonLoader
+            textViewError.isVisible = pokemonModel is PokemonError
+            if(pokemonModel is PokemonSuccess){
+                adapter.updateList(pokemonModel.pokeList)
             }
 
         })
 
 
-        /*val pokeList = arrayListOf<Pokemon>().apply {
-            add(Pokemon("CAIRN TERRIER"))
-            add(Pokemon("COCKER SPANIEL ANGLAIS"))
-            add(Pokemon("SETTER GORDON"))
-            add(Pokemon("AUSTRALIAN TERRIER"))
-            add(Pokemon("CHIEN DE BERGER BELGE"))
-            add(Pokemon("GRIFFON NIVERNAIS"))
-            add(Pokemon("ARIEGEOIS"))
-            add(Pokemon("GASCON SAINTONGEOIS"))
-            add(Pokemon("GRAND BLEU DE GASCOGNE"))
-            add(Pokemon("POITEVIN"))
-            add(Pokemon("CHIEN D'ARTOIS"))
-            add(Pokemon("PORCELAINE"))
-        }
 
-        adapter.updateList(pokeList)
-
-         */
     }
     private fun onClickedpokemon(id: Int) {
         findNavController().navigate(R.id.navigateToPokemonDetailFragment, bundleOf(

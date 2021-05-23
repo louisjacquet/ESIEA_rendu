@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.esieatp1.R
 import com.example.esieatp1.presentation.list.Pokemon
 
+
 class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Int)->Unit)?=null) :
     RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
 

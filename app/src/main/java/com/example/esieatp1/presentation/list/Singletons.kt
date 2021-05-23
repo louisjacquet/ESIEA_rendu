@@ -13,7 +13,7 @@ class Singletons {
 
         var cache = Cache(File(context?.cacheDir, "responses"), 10 * 1024 * 1024)
 
-        val okhttpClient: OkHttpClient = OkHttpClient.Builder() //.newBuilder() ???
+        val okhttpClient: OkHttpClient = OkHttpClient.newBuilder() //.newBuilder() ???
             .cache(cache)
             .build()
         val pokeApi: PokeApi = Retrofit.Builder()
