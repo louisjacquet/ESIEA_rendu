@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.esieatp1.R
 import com.example.esieatp1.presentation.PokemonAdapter
 import com.example.esieatp1.presentation.api.PokeApi
-import com.example.esieatp1.presentation.api.PokemonResponse
+import com.example.esieatp1.presentation.api.PokemonListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class PokemonListFragement : Fragment() {
+class PokemonListFragment : Fragment() {
     private lateinit var recyclerView : RecyclerView
     private val adapter = PokemonAdapter(listOf(), :: onClickedpokemon)
 
@@ -42,27 +42,20 @@ class PokemonListFragement : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.pokemon_recyclerview)
         recyclerView.apply {
-            layoutManager = this@PokemonListFragement.layoutManager
-            adapter = this@PokemonListFragement.adapter
+            layoutManager = this@PokemonListFragment.layoutManager
+            adapter = this@PokemonListFragment.adapter
         }
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://pokeapi.co/api/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val pokeApi: PokeApi = retrofit.create(PokeApi::class.java)
-        pokeApi.getPokemonList().enqueue(object : Callback<PokemonResponse> {
+       Singletons.pokeApi.getPokemonList().enqueue(object : Callback<PokemonListResponse> {
             //object : Callback<PokemonResponse>
             override fun onFailure(
-                call: Call<PokemonResponse>,
+                call: Call<PokemonListResponse>,
                 t: Throwable) {
                 TODO("Not yet implemented")
             }
 
             override fun onResponse(
-                call: Call<PokemonResponse>,
-                response: Response<PokemonResponse>
+                call: Call<PokemonListResponse>,
+                response: Response<PokemonListResponse>
             ) {
                 if (response.isSuccessful && response.body() != null){
                     val PokemonResponse = response.body() !!
@@ -94,7 +87,7 @@ class PokemonListFragement : Fragment() {
          */
     }
     private fun onClickedpokemon(pokemon: Pokemon) {
-        findNavController().navigate(R.id.navigateToPokemonDetailFragement)
+        findNavController().navigate(R.id.navigateToPokemonDetailFragment)
     }
 
 }
