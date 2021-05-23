@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.esieatp1.R
 import com.example.esieatp1.presentation.list.Pokemon
 
-class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Pokemon)->Unit)?=null) :
+class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Int)->Unit)?=null) :
     RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
 
 
@@ -49,7 +49,7 @@ class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Pokemon
         val pokemon : Pokemon = dataSet[position]
         viewHolder.textView.text = pokemon.name
         viewHolder.itemView.setOnClickListener {
-            listener?.invoke(pokemon)
+            listener?.invoke(position)
         }
     }
 
