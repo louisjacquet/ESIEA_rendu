@@ -25,7 +25,7 @@ class PokemonListFragment : Fragment() {
     private lateinit var recyclerView : RecyclerView
     private lateinit var loader: ProgressBar
     private lateinit var textViewError: TextView
-    private val adapter = PokemonAdapter(listOf(), :: onClickedpokemon)
+    private val adapter = PokemonAdapter(listOf(), :: onClickedPokemon)
 
     private val viewModel: PokemonListViewModel by viewModels()
 
@@ -53,6 +53,8 @@ class PokemonListFragment : Fragment() {
             textViewError.isVisible = pokemonModel is PokemonError
             if(pokemonModel is PokemonSuccess){
                 adapter.updateList(pokemonModel.pokeList)
+            }else{
+
             }
 
         })
@@ -60,7 +62,7 @@ class PokemonListFragment : Fragment() {
 
 
     }
-    private fun onClickedpokemon(id: Int) {
+    private fun onClickedPokemon(id: Int) {
         findNavController().navigate(R.id.navigateToPokemonDetailFragment, bundleOf(
             "pokemonId" to (id+1)
         ))

@@ -1,6 +1,5 @@
 package com.example.esieatp1.presentation
 
-import android.service.autofill.Dataset
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,7 @@ import com.example.esieatp1.R
 import com.example.esieatp1.presentation.list.Pokemon
 
 
-class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Int)->Unit)?=null) :
-    RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
+class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Int)->Unit)?=null) : RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
 
 
     /**
@@ -58,7 +56,7 @@ class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Int)->U
         }
         Glide
             .with(viewHolder.itemView.context)
-            .load("https://raw.githubusercontent.com/PokeAPI/sprites/pokemon/${position + 1}.png")
+            .load("https://github.com/PokeAPI/sprites/tree/master/sprites/pokemon/${position+1}.png")
             .centerCrop()
             .into(viewHolder.imageView);
     }
