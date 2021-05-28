@@ -58,7 +58,7 @@ class PokemonAdapter(private var dataSet: List<Pokemon>, var listener :((Int)->U
             .with(viewHolder.itemView.context)
             .load("https://github.com/PokeAPI/sprites/tree/master/sprites/pokemon/${position+1}.png")
             .centerCrop()
-            .into(viewHolder.imageView);
+            .into(viewHolder.imageView)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
